@@ -13,7 +13,7 @@ COOKIE_EXPIRATION = 30 # days
 
 
 class LangMiddleware(object):
-    """WSGI Middleware that deals with language support for you
+    """WSGI Middleware that deals with language support for you
     you only have to use environ["lang"] to read/set it
     """
 
@@ -112,6 +112,7 @@ class LangMiddleware(object):
                                     if name.lower() != 'content-language']
 
             # lang changed
+            lang = environ['lang.origin']
             if lang != environ['lang']:
                 if environ['lang'] not in self.languages:
                     environ['lang'] = lang
@@ -126,5 +127,7 @@ class LangMiddleware(object):
             return start_response(status, response_headers)
 
         environ['lang'] = lang
+        environ['lang.origin'] = lang # shouldn't be touched
+
         response = self.application(environ, _start_response)
         return response
