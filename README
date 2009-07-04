@@ -1,0 +1,1 @@
+WSGI Middleware that deal with language for you. Tell him which languages to you support and it will gives the `lang` into the `environ` variable. Set it back to modify it.
