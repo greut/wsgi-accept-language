@@ -129,5 +129,8 @@ class LangMiddleware(object):
         environ['lang'] = lang
         environ['lang.origin'] = lang # shouldn't be touched
 
-        response = self.application(environ, _start_response)
-        return response
+        app_iter = self.application(environ, _start_response)
+        for data in app_iter:
+            yield data
+        if hasattr(app_iter, 'close'):
+            app_iter.close()
