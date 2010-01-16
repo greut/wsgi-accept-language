@@ -1,3 +1,4 @@
+import re
 import locale
 
 from datetime import datetime, timedelta
@@ -16,6 +17,8 @@ class LangMiddleware(object):
     """WSGI Middleware that deals with language support for you
     you only have to use environ["lang"] to read/set it
     """
+
+    SEP = re.compile(", *")
 
     def __init__(self, application, languages=None, with_cookie=True):
         self.application = application
@@ -46,7 +49,7 @@ class LangMiddleware(object):
         preferred = None
         if accept:
             langs = {}
-            l = accept.split(", ")
+            l = self.SEP.split(accept)
             for lang in l:
                 lang = lang.strip()
                 hasq = lang.find(";q=")

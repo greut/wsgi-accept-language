@@ -46,6 +46,13 @@ class TestLang(unittest.TestCase):
         res = app.get("/", extra_environ=environ)
         assert res.headers.get("Content-Language") == "fr"
     
+    def testDiscroveryWithRegionAltFormatting(self):
+        app = LangMiddleware(self.app, ["en", "fr"])
+        app = TestApp(app)
+        environ = {"HTTP_ACCEPT_LANGUAGE": "de-CH,de;q=0.9,en;q=0.8"}
+        res = app.get("/", extra_environ=environ)
+        assert res.headers.get("Content-Language") == "en"
+
     def testSetLangFromApp(self):
         app = LangMiddleware(self.app2, ["en", "fr"])
         app = TestApp(app)
